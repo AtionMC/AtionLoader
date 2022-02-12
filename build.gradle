@@ -1,0 +1,79 @@
+buildscript {
+    repositories {
+        maven { url 'https://ationmc.github.io/maven/' }
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'io.github.ationmc:AtionGradle:0.0.1-alpha'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'maven-publish'
+apply plugin: 'AtionMC'
+
+archivesBaseName = project.main_name
+version = project.main_version
+group = project.main_group
+
+def asmVersion = '9.2'
+
+repositories {
+    maven { url 'https://ationmc.github.io/maven/' }
+    mavenCentral()
+}
+
+
+dependencies {
+    implementation 'io.github.ationmc:LaunchWrapper:0.0.1-alpha'
+    implementation 'org.spongepowered:mixin:0.8.5'
+    implementation("org.ow2.asm:asm:$asmVersion")
+    implementation("org.ow2.asm:asm-analysis:$asmVersion")
+    implementation("org.ow2.asm:asm-commons:$asmVersion")
+    implementation("org.ow2.asm:asm-tree:$asmVersion")
+    implementation("org.ow2.asm:asm-util:$asmVersion")
+}
+
+ationmc {
+    minecraft {
+        version = '1.18.1'
+        tweakClasses = ['io.github.ationmc.loader.launch.Tweaker']
+    }
+}
+
+// targetCompatibility = sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = sourceCompatibility = JavaVersion.VERSION_17
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allJava
+    archiveClassifier = 'sources'
+}
+
+publishing {
+
+    repositories {
+        maven {
+            // url "${projectDir}/build"
+            url "$buildDir/maven"
+        }
+    }
+    /*
+    repositories {
+        def ENV = System.getenv()
+        if (ENV.MAVEN_URL) {
+            maven {
+                url ENV.MAVEN_URL
+            }
+        }
+    }
+    */
+    publications {
+        mavenJava(MavenPublication) {
+            groupId project.group
+            artifactId project.name
+            version project.version
+            from components.java
+            artifact sourcesJar
+        }
+    }
+}
