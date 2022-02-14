@@ -1,6 +1,7 @@
 buildscript {
     repositories {
-        maven { url 'https://ationmc.github.io/maven/' }
+        maven { url 'http://sz.zdvps.cn:32703/' }
+        // maven { url 'https://ationmc.github.io/maven/' }
         mavenCentral()
     }
     dependencies {
@@ -19,7 +20,8 @@ group = project.main_group
 def asmVersion = '9.2'
 
 repositories {
-    maven { url 'https://ationmc.github.io/maven/' }
+    maven { url 'http://sz.zdvps.cn:32703/' }
+    // maven { url 'https://ationmc.github.io/maven/' }
     mavenCentral()
 }
 
